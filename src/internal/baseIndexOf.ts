@@ -11,11 +11,11 @@ import strictIndexOf from './strictIndexOf'
  * @param {number} fromIndex The index to search from.
  * @returns {number} Returns the index of the matched value, else `-1`.
  */
-function baseIndexOf(array, value, fromIndex) {
+function baseIndexOf(array: Array<any>, value: any, fromIndex: number): number {
+  // eslint-disable-next-line no-self-compare
   return value === value
     ? strictIndexOf(array, value, fromIndex)
-    : // @ts-expect-error
-    baseFindIndex(array, baseIsNaN, fromIndex)
+    : baseFindIndex(array, baseIsNaN, fromIndex)
 }
 
 export default baseIndexOf

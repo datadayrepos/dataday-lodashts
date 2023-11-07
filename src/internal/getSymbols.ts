@@ -11,8 +11,8 @@ const nativeGetSymbols = Object.getOwnPropertySymbols
  * @param {object} object The object to query.
  * @returns {Array} Returns the array of symbols.
  */
-function getSymbols(object) {
-  if (object == null)
+function getSymbols(object: object): Array<any> {
+  if (object === null)
     return []
 
   object = Object(object)

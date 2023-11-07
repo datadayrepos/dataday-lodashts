@@ -13,9 +13,8 @@ import baseFlatten from './internal/baseFlatten'
  * flatten([1, [2, [3, [4]], 5]])
  * // => [1, 2, [3, [4]], 5]
  */
-function flatten(array) {
+function flatten(array: Array<any>): Array<any> {
   const length = array == null ? 0 : array.length
-  // @ts-expect-error
   return length ? baseFlatten(array, 1) : []
 }
 

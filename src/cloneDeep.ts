@@ -21,7 +21,7 @@ const CLONE_SYMBOLS_FLAG = 4
  * console.log(deep[0] === objects[0])
  * // => false
  */
-function cloneDeep(value) {
+function cloneDeep(value: any): any {
   return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG)
 }
 

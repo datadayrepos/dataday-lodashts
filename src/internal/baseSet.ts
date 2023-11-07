@@ -14,7 +14,7 @@ import toKey from './toKey'
  * @param {Function} [customizer] The function to customize path creation.
  * @returns {object} Returns `object`.
  */
-function baseSet(object, path, value, customizer) {
+function baseSet(object: object, path: Array<any> | string, value: any, customizer?: Function): object {
   if (!isObject(object))
     return object
 
@@ -30,14 +30,13 @@ function baseSet(object, path, value, customizer) {
     const key = toKey(path[index])
     let newValue = value
 
-    if (index != lastIndex) {
+    if (index !== lastIndex) {
       const objValue = nested[key]
       newValue = customizer ? customizer(objValue, key, nested) : undefined
       if (newValue === undefined) {
         newValue = isObject(objValue)
           ? objValue
-          : // @ts-expect-error
-          isIndex(path[index + 1])
+          : isIndex(path[index + 1])
             ? []
             : {}
       }

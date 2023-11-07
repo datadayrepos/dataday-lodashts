@@ -20,7 +20,7 @@
  * isObjectLike(null)
  * // => false
  */
-function isObjectLike(value) {
+function isObjectLike(value: any): boolean {
   return typeof value === 'object' && value !== null
 }
 

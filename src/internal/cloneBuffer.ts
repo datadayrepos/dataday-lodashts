@@ -1,28 +1,3 @@
-import root from './root'
-
-/** Detect free variable `exports`. */
-const freeExports
-  = typeof exports === 'object'
-  && exports !== null
-  && !exports.nodeType
-  && exports
-
-/** Detect free variable `module`. */
-const freeModule
-  = freeExports
-  && typeof module === 'object'
-  && module !== null
-  // @ts-expect-error
-  && !module.nodeType
-  && module
-
-/** Detect the popular CommonJS extension `module.exports`. */
-const moduleExports = freeModule && freeModule.exports === freeExports
-
-/** Built-in value references. */
-const Buffer = moduleExports ? root.Buffer : undefined
-const allocUnsafe = Buffer ? Buffer.allocUnsafe : undefined
-
 /**
  * Creates a clone of `buffer`.
  *
@@ -31,16 +6,17 @@ const allocUnsafe = Buffer ? Buffer.allocUnsafe : undefined
  * @param {boolean} [isDeep] Specify a deep clone.
  * @returns {Buffer} Returns the cloned buffer.
  */
-function cloneBuffer(buffer, isDeep) {
+function cloneBuffer(buffer: ArrayBuffer, isDeep: boolean): ArrayBuffer {
   if (isDeep)
-    return buffer.slice()
+    return buffer.slice(0)
 
-  const length = buffer.length
-  const result = allocUnsafe
-    ? allocUnsafe(length)
-    : new buffer.constructor(length)
+  // Assuming we have a method to create an ArrayBuffer of the same length.
+  const result = new ArrayBuffer(buffer.byteLength)
 
-  buffer.copy(result)
+  // Now we have to copy the contents of `buffer` to `result`.
+  // Here we use a new Uint8Array as a view for the copying operation.
+  new Uint8Array(result).set(new Uint8Array(buffer))
+
   return result
 }
 

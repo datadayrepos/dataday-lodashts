@@ -1,15 +1,26 @@
 import Hash from './Hash.js'
 
+interface MapCacheData {
+  hash: Hash
+  map: Map<string, any>
+  string: Hash
+}
+
+// Define an interface that includes __data__
+interface DataContainer {
+  __data__: MapCacheData
+}
+
 /**
  * Gets the data for `map`.
  *
  * @private
- * @param {object} map The map to query.
+ * @param {DataContainer} dataContainer The container object with __data__.
  * @param {string} key The reference key.
  * @returns {*} Returns the map data.
  */
-function getMapData({ __data__ }, key) {
-  const data = __data__
+function getMapData(dataContainer: DataContainer, key: string): any {
+  const data = dataContainer.__data__
   return isKeyable(key)
     ? data[typeof key === 'string' ? 'string' : 'hash']
     : data.map
@@ -22,7 +33,7 @@ function getMapData({ __data__ }, key) {
  * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
  */
-function isKeyable(value) {
+function isKeyable(value: any): boolean {
   const type = typeof value
   return type === 'string'
     || type === 'number'
@@ -33,6 +44,9 @@ function isKeyable(value) {
 }
 
 class MapCache {
+  size: number
+  __data__: MapCacheData
+
   /**
    * Creates a map cache object to store key-value pairs.
    *
@@ -40,14 +54,17 @@ class MapCache {
    * @constructor
    * @param {Array} [entries] The key-value pairs to cache.
    */
-  constructor(entries) {
-    let index = -1
-    const length = entries == null ? 0 : entries.length
+  constructor(entries?: Array<[string, any]>) {
+    this.size = 0
+    this.__data__ = {
+      hash: new Hash([]),
+      map: new Map<string, any>(),
+      string: new Hash([]),
+    }
 
-    this.clear()
-    while (++index < length) {
-      const entry = entries[index]
-      this.set(entry[0], entry[1])
+    if (entries) {
+      for (const [key, value] of entries)
+        this.set(key, value)
     }
   }
 
@@ -59,9 +76,9 @@ class MapCache {
   clear() {
     this.size = 0
     this.__data__ = {
-      hash: new Hash(),
+      hash: new Hash([]),
       map: new Map(),
-      string: new Hash(),
+      string: new Hash([]),
     }
   }
 
@@ -72,7 +89,7 @@ class MapCache {
    * @param {string} key The key of the value to remove.
    * @returns {boolean} Returns `true` if the entry was removed, else `false`.
    */
-  delete(key) {
+  delete(key: string): boolean {
     const result = getMapData(this, key).delete(key)
     this.size -= result ? 1 : 0
     return result
@@ -85,7 +102,7 @@ class MapCache {
    * @param {string} key The key of the value to get.
    * @returns {*} Returns the entry value.
    */
-  get(key) {
+  get(key: string): any {
     return getMapData(this, key).get(key)
   }
 
@@ -96,7 +113,7 @@ class MapCache {
    * @param {string} key The key of the entry to check.
    * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
    */
-  has(key) {
+  has(key: string): boolean {
     return getMapData(this, key).has(key)
   }
 
@@ -108,12 +125,12 @@ class MapCache {
    * @param {*} value The value to set.
    * @returns {object} Returns the map cache instance.
    */
-  set(key, value) {
+  set(key: string, value: any): object {
     const data = getMapData(this, key)
     const size = data.size
 
     data.set(key, value)
-    this.size += data.size == size ? 0 : 1
+    this.size += data.size === size ? 0 : 1
     return this
   }
 }

@@ -10,7 +10,7 @@ class Hash {
    * @constructor
    * @param {Array} [entries] The key-value pairs to cache.
    */
-  constructor(entries) {
+  constructor(entries: Array<any>) {
     let index = -1
     const length = entries == null ? 0 : entries.length
 
@@ -38,7 +38,7 @@ class Hash {
    * @param {string} key The key of the value to remove.
    * @returns {boolean} Returns `true` if the entry was removed, else `false`.
    */
-  delete(key) {
+  delete(key: string): boolean {
     const result = this.has(key) && delete this.__data__[key]
     this.size -= result ? 1 : 0
     return result
@@ -51,7 +51,7 @@ class Hash {
    * @param {string} key The key of the value to get.
    * @returns {*} Returns the entry value.
    */
-  get(key) {
+  get(key: string): any {
     const data = this.__data__
     const result = data[key]
     return result === HASH_UNDEFINED ? undefined : result
@@ -64,7 +64,7 @@ class Hash {
    * @param {string} key The key of the entry to check.
    * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
    */
-  has(key) {
+  has(key: string): boolean {
     const data = this.__data__
     return data[key] !== undefined
   }
@@ -77,7 +77,7 @@ class Hash {
    * @param {*} value The value to set.
    * @returns {object} Returns the hash instance.
    */
-  set(key, value) {
+  set(key: string, value: any): object {
     const data = this.__data__
     this.size += this.has(key) ? 0 : 1
     data[key] = value === undefined ? HASH_UNDEFINED : value

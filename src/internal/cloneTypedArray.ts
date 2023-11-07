@@ -1,5 +1,12 @@
 import cloneArrayBuffer from './cloneArrayBuffer'
 
+export interface CloneableTypedArray {
+  buffer: ArrayBuffer
+  byteOffset: number
+  length: number
+  constructor: new (buffer: ArrayBuffer, byteOffset: number, length: number) => any
+}
+
 /**
  * Creates a clone of `typedArray`.
  *
@@ -8,7 +15,7 @@ import cloneArrayBuffer from './cloneArrayBuffer'
  * @param {boolean} [isDeep] Specify a deep clone.
  * @returns {object} Returns the cloned typed array.
  */
-function cloneTypedArray(typedArray, isDeep) {
+function cloneTypedArray(typedArray: CloneableTypedArray, isDeep: boolean): any {
   const buffer = isDeep
     ? cloneArrayBuffer(typedArray.buffer)
     : typedArray.buffer

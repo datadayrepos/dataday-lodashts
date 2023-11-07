@@ -26,8 +26,7 @@ import baseIsEqual from './internal/baseIsEqual'
  * object === other
  * // => false
  */
-function isEqual(value, other) {
-  // @ts-expect-error
+function isEqual(value: any, other: any): boolean {
   return baseIsEqual(value, other)
 }
 

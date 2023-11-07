@@ -27,12 +27,12 @@ const rePropName = RegExp(
  * @param {string} string The string to convert.
  * @returns {Array} Returns the property path array.
  */
-const stringToPath = memoizeCapped((string) => {
+const stringToPath = memoizeCapped((string: { charCodeAt: (arg0: number) => number; replace: (arg0: RegExp, arg1: (match: any, expression: any, quote: any, subString: any) => void) => void }) => {
   const result: any[] = []
   if (string.charCodeAt(0) === charCodeOfDot)
     result.push('')
 
-  string.replace(rePropName, (match, expression, quote, subString) => {
+  string.replace(rePropName, (match: any, expression: string, quote: any, subString: string) => {
     let key = match
     if (quote)
       key = subString.replace(reEscapeChar, '$1')

@@ -28,7 +28,7 @@ const CLONE_SYMBOLS_FLAG = 4
  * console.log(shallow[0] === objects[0])
  * // => true
  */
-function clone(value) {
+function clone(value: any): any {
   return baseClone(value, CLONE_SYMBOLS_FLAG)
 }
 

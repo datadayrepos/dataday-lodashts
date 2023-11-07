@@ -31,18 +31,25 @@ const hasOwnProperty = Object.prototype.hasOwnProperty
  * @param {object} [stack] Tracks traversed `object` and `other` objects.
  * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
  */
-function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
+function baseIsEqualDeep(
+  object: object,
+  other: object,
+  bitmask: number = 1,
+  customizer?: Function,
+  equalFunc?: Function, // Make equalFunc optional if your logic allows for it
+  stack?: object, // stack is already being handled as optional within your function
+): boolean {
   let objIsArr = Array.isArray(object)
   const othIsArr = Array.isArray(other)
   let objTag = objIsArr ? arrayTag : getTag(object)
   let othTag = othIsArr ? arrayTag : getTag(other)
 
-  objTag = objTag == argsTag ? objectTag : objTag
-  othTag = othTag == argsTag ? objectTag : othTag
+  objTag = objTag === argsTag ? objectTag : objTag
+  othTag = othTag === argsTag ? objectTag : othTag
 
-  let objIsObj = objTag == objectTag
-  const othIsObj = othTag == objectTag
-  const isSameTag = objTag == othTag
+  let objIsObj = objTag === objectTag
+  const othIsObj = othTag === objectTag
+  const isSameTag = objTag === othTag
 
   if (isSameTag && isBuffer(object)) {
     if (!isBuffer(other))
@@ -52,8 +59,7 @@ function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
     objIsObj = false
   }
   if (isSameTag && !objIsObj) {
-    // @ts-expect-error
-    stack || (stack = new Stack())
+    stack || (stack = new Stack([]))
     return objIsArr || isTypedArray(object)
       ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
       : equalByTag(
@@ -73,16 +79,14 @@ function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
     if (objIsWrapped || othIsWrapped) {
       const objUnwrapped = objIsWrapped ? object.value() : object
       const othUnwrapped = othIsWrapped ? other.value() : other
-      // @ts-expect-error
-      stack || (stack = new Stack())
+      stack || (stack = new Stack([]))
       return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack)
     }
   }
   if (!isSameTag)
     return false
 
-  // @ts-expect-error
-  stack || (stack = new Stack())
+  stack || (stack = new Stack([]))
   return equalObjects(object, other, bitmask, customizer, equalFunc, stack)
 }
 

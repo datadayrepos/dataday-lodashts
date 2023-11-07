@@ -1,15 +1,13 @@
-/** Used to convert symbols to primitives and strings. */
-const symbolValueOf = Symbol.prototype.valueOf
-
 /**
  * Creates a clone of the `symbol` object.
  *
  * @private
- * @param {object} symbol The symbol object to clone.
- * @returns {object} Returns the cloned symbol object.
+ * @param {symbol} symbol The symbol to clone.
+ * @returns {symbol} Returns the cloned symbol object.
  */
-function cloneSymbol(symbol) {
-  return Object(symbolValueOf.call(symbol))
+function cloneSymbol(symbol: symbol): symbol {
+  // Wrap the symbol primitive into a symbol object.
+  return Object(Symbol.prototype.valueOf.call(symbol))
 }
 
 export default cloneSymbol

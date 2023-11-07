@@ -8,7 +8,7 @@ import getSymbols from './getSymbols'
  * @param {object} object The object to query.
  * @returns {Array} Returns the array of property names and symbols.
  */
-function getAllKeys(object) {
+function getAllKeys(object: object): Array<any> {
   const result = keys(object)
   if (!Array.isArray(object))
     result.push(...getSymbols(object))

@@ -8,7 +8,7 @@ import eq from '../eq'
  * @param {*} key The key to search for.
  * @returns {number} Returns the index of the matched value, else `-1`.
  */
-function assocIndexOf(array, key) {
+function assocIndexOf(array: Array<any>, key: any): number {
   let { length } = array
   while (length--) {
     if (eq(array[length][0], key))

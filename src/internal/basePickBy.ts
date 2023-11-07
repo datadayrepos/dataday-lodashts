@@ -11,7 +11,7 @@ import castPath from './castPath'
  * @param {Function} predicate The function invoked per property.
  * @returns {object} Returns the new object.
  */
-function basePickBy(object, paths, predicate) {
+function basePickBy(object: object, paths: string[], predicate: Function): object {
   let index = -1
   const length = paths.length
   const result = {}
@@ -19,10 +19,8 @@ function basePickBy(object, paths, predicate) {
   while (++index < length) {
     const path = paths[index]
     const value = baseGet(object, path)
-    if (predicate(value, path)) {
-      // @ts-expect-error
+    if (predicate(value, path))
       baseSet(result, castPath(path, object), value)
-    }
   }
   return result
 }

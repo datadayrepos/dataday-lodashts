@@ -10,9 +10,8 @@ import basePickBy from './basePickBy'
  * @param {string[]} paths The property paths to pick.
  * @returns {object} Returns the new object.
  */
-function basePick(object, paths) {
-  // @ts-expect-error
-  return basePickBy(object, paths, (value, path) => hasIn(object, path))
+function basePick(object: object, paths: string[]): object {
+  return basePickBy(object, paths, (value: any, path: string) => hasIn(object, path))
 }
 
 export default basePick

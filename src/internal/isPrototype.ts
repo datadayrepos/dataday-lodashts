@@ -8,7 +8,7 @@ const objectProto = Object.prototype
  * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
  */
-function isPrototype(value) {
+function isPrototype(value: any): boolean {
   const Ctor = value && value.constructor
   const proto = (typeof Ctor === 'function' && Ctor.prototype) || objectProto
 

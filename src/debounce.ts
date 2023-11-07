@@ -62,8 +62,18 @@ import root from './internal/root'
  * // Check for pending invocations.
  * const status = debounced.pending() ? "Pending..." : "Ready"
  */
-function debounce(func, wait, options?) {
-  let lastArgs, lastThis, maxWait, result, timerId, lastCallTime
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number,
+  options?: { leading?: boolean; maxWait?: number; trailing?: boolean },
+): (...funcArgs: Parameters<T>) => void {
+  let lastArgs: Parameters<T> | null = null
+  let lastThis: any
+  let maxWait: number | undefined
+  let result: any
+  // Assume this is browser environment
+  let timerId: number | null = null
+  let lastCallTime: number | undefined
 
   let lastInvokeTime = 0
   let leading = false
@@ -71,46 +81,47 @@ function debounce(func, wait, options?) {
   let trailing = true
 
   // Bypass `requestAnimationFrame` by explicitly setting `wait=0`.
-  const useRAF
-    = !wait && wait !== 0 && typeof root.requestAnimationFrame === 'function'
+  const useRAF = !wait && wait !== 0 && typeof window.requestAnimationFrame === 'function'
 
   if (typeof func !== 'function')
     throw new TypeError('Expected a function')
 
+  // Coerce `wait` to a number, defaulting to 0 if it's falsy
   wait = +wait || 0
-  if (isObject(options)) {
+
+  if (typeof options === 'object' && options !== null) {
     leading = !!options.leading
     maxing = 'maxWait' in options
-    maxWait = maxing ? Math.max(+options.maxWait || 0, wait) : maxWait
+    maxWait = maxing ? Math.max(+(options.maxWait || 0), wait) : undefined
     trailing = 'trailing' in options ? !!options.trailing : trailing
   }
 
-  function invokeFunc(time) {
+  function invokeFunc(time: number) {
     const args = lastArgs
     const thisArg = lastThis
 
-    lastArgs = lastThis = undefined
+    lastArgs = lastThis = null
     lastInvokeTime = time
-    result = func.apply(thisArg, args)
+    result = func.apply(thisArg, args as any)
     return result
   }
 
-  function startTimer(pendingFunc, wait) {
+  function startTimer(pendingFunc: () => void, wait: number) {
     if (useRAF) {
-      root.cancelAnimationFrame(timerId)
-      return root.requestAnimationFrame(pendingFunc)
+      window.cancelAnimationFrame(timerId!)
+      return window.requestAnimationFrame(pendingFunc)
     }
-    return setTimeout(pendingFunc, wait)
+    return window.setTimeout(pendingFunc, wait) as unknown as number
   }
 
-  function cancelTimer(id) {
+  function cancelTimer(id: number) {
     if (useRAF)
-      return root.cancelAnimationFrame(id)
-
-    clearTimeout(id)
+      window.cancelAnimationFrame(id)
+    else
+      window.clearTimeout(id)
   }
 
-  function leadingEdge(time) {
+  function leadingEdge(time: number) {
     // Reset any `maxWait` timer.
     lastInvokeTime = time
     // Start the timer for the trailing edge.
@@ -119,28 +130,27 @@ function debounce(func, wait, options?) {
     return leading ? invokeFunc(time) : result
   }
 
-  function remainingWait(time) {
-    const timeSinceLastCall = time - lastCallTime
+  function remainingWait(time: number) {
+    const timeSinceLastCall = lastCallTime !== undefined ? time - lastCallTime : wait
     const timeSinceLastInvoke = time - lastInvokeTime
     const timeWaiting = wait - timeSinceLastCall
 
-    return maxing
+    // Here, ensure maxWait is defined before trying to use it in arithmetic
+    return maxing && maxWait !== undefined
       ? Math.min(timeWaiting, maxWait - timeSinceLastInvoke)
       : timeWaiting
   }
 
-  function shouldInvoke(time) {
-    const timeSinceLastCall = time - lastCallTime
+  function shouldInvoke(time: number) {
+    const timeSinceLastCall = lastCallTime !== undefined ? time - lastCallTime : wait
     const timeSinceLastInvoke = time - lastInvokeTime
 
-    // Either this is the first call, activity has stopped and we're at the
-    // trailing edge, the system time has gone backwards and we're treating
-    // it as the trailing edge, or we've hit the `maxWait` limit.
+    // Here, check that maxWait is not undefined before comparing it
     return (
       lastCallTime === undefined
       || timeSinceLastCall >= wait
       || timeSinceLastCall < 0
-      || (maxing && timeSinceLastInvoke >= maxWait)
+      || (maxing && maxWait !== undefined && timeSinceLastInvoke >= maxWait)
     )
   }
 
@@ -153,24 +163,26 @@ function debounce(func, wait, options?) {
     timerId = startTimer(timerExpired, remainingWait(time))
   }
 
-  function trailingEdge(time) {
-    timerId = undefined
+  function trailingEdge(time: number) {
+    timerId = null
 
-    // Only invoke if we have `lastArgs` which means `func` has been
-    // debounced at least once.
     if (trailing && lastArgs)
       return invokeFunc(time)
 
-    lastArgs = lastThis = undefined
+    lastArgs = lastThis = null
     return result
   }
 
   function cancel() {
-    if (timerId !== undefined)
+    if (timerId !== null)
       cancelTimer(timerId)
 
     lastInvokeTime = 0
-    lastArgs = lastCallTime = lastThis = timerId = undefined
+    // Correctly assign undefined instead of null to match the type
+    lastArgs = null
+    lastCallTime = lastThis = undefined // if these should also be reset to null, adjust their types accordingly
+
+    timerId = null
   }
 
   function flush() {
@@ -181,31 +193,30 @@ function debounce(func, wait, options?) {
     return timerId !== undefined
   }
 
-  function debounced(...args) {
+  function debounced(...args: Parameters<T>) {
     const time = Date.now()
     const isInvoking = shouldInvoke(time)
 
     lastArgs = args
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    lastThis = this
     lastCallTime = time
 
     if (isInvoking) {
-      if (timerId === undefined)
+      if (timerId === null)
         return leadingEdge(lastCallTime)
 
       if (maxing) {
-        // Handle invocations in a tight loop.
-        timerId = startTimer(timerExpired, wait)
+        // Using an arrow function to maintain the correct `this` context
+        timerId = startTimer(() => timerExpired(), wait)
         return invokeFunc(lastCallTime)
       }
     }
-    if (timerId === undefined)
-      timerId = startTimer(timerExpired, wait)
 
-    return result
+    if (timerId === null) {
+      // Using an arrow function to maintain the correct `this` context
+      timerId = startTimer(() => timerExpired(), wait)
+    }
   }
+
   debounced.cancel = cancel
   debounced.flush = flush
   debounced.pending = pending

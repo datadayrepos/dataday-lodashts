@@ -25,7 +25,7 @@ const nodeIsTypedArray = nodeTypes && nodeTypes.isTypedArray
  * // => false
  */
 const isTypedArray = nodeIsTypedArray
-  ? value => nodeIsTypedArray(value)
-  : value => isObjectLike(value) && reTypedTag.test(getTag(value))
+  ? (value: any) => nodeIsTypedArray(value)
+  : (value: any) => isObjectLike(value) && reTypedTag.test(getTag(value))
 
 export default isTypedArray

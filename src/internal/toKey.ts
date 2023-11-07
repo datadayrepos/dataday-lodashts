@@ -10,12 +10,12 @@ const INFINITY = 1 / 0
  * @param {*} value The value to inspect.
  * @returns {string|symbol} Returns the key.
  */
-function toKey(value) {
+function toKey(value: any): string | symbol {
   if (typeof value === 'string' || isSymbol(value))
     return value
 
   const result = `${value}`
-  return result == '0' && 1 / value == -INFINITY ? '-0' : result
+  return result === '0' && 1 / value === -INFINITY ? '-0' : result
 }
 
 export default toKey

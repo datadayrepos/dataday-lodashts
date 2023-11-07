@@ -2,16 +2,16 @@
  * Converts `set` to an array of its values.
  *
  * @private
- * @param {object} set The set to convert.
- * @returns {Array} Returns the values.
+ * @param {Set<any>} set The set to convert.
+ * @returns {Array<any>} Returns the array of values.
  */
-function setToArray(set) {
-  let index = -1
-  const result = new Array(set.size)
+function setToArray(set: Set<any>): Array<any> {
+  const result: Array<any> = []
 
   set.forEach((value) => {
-    result[++index] = value
+    result.push(value)
   })
+
   return result
 }
 

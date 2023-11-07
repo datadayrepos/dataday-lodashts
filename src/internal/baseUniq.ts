@@ -17,13 +17,13 @@ const LARGE_ARRAY_SIZE = 200
  * @param {Function} [comparator] The comparator invoked per element.
  * @returns {Array} Returns the new duplicate free array.
  */
-function baseUniq(array, iteratee, comparator) {
+function baseUniq(array: any[], iteratee?: ((arg0: any) => any) | undefined, comparator?: undefined): Array<any> {
   let index = -1
   let includes = arrayIncludes
   let isCommon = true
 
   const { length } = array
-  const result = []
+  const result: any[] = []
   let seen = result
 
   if (comparator) {
@@ -55,10 +55,9 @@ function baseUniq(array, iteratee, comparator) {
         if (seen[seenIndex] === computed)
           continue outer
       }
-      if (iteratee) {
-        // @ts-expect-error
+      if (iteratee)
         seen.push(computed)
-      }
+
       // @ts-expect-error
       result.push(value)
       // @ts-expect-error

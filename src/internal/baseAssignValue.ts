@@ -3,12 +3,12 @@
  * value checks.
  *
  * @private
- * @param {object} object The object to modify.
+ * @param {Record<string, any>} object The object to modify.
  * @param {string} key The key of the property to assign.
  * @param {*} value The value to assign.
  */
-function baseAssignValue(object, key, value) {
-  if (key == '__proto__') {
+function baseAssignValue(object: Record<string, any>, key: string, value: any) {
+  if (key === '__proto__') {
     Object.defineProperty(object, key, {
       configurable: true,
       enumerable: true,

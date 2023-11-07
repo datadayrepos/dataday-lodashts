@@ -12,13 +12,14 @@ class SetCache {
    * @constructor
    * @param {Array} [values] The values to cache.
    */
-  constructor(values) {
-    let index = -1
-    const length = values == null ? 0 : values.length
-    // @ts-expect-error
-    this.__data__ = new MapCache()
-    while (++index < length)
-      this.add(values[index])
+  constructor(values?: any[]) {
+    this.__data__ = new MapCache([])
+    if (values != null) {
+      let index = -1
+      const length = values.length
+      while (++index < length)
+        this.add(values[index])
+    }
   }
 
   /**
@@ -27,9 +28,9 @@ class SetCache {
    * @memberOf SetCache
    * @alias push
    * @param {*} value The value to cache.
-   * @returns {object} Returns the cache instance.
+   * @returns {SetCache} Returns the cache instance.
    */
-  add(value) {
+  add(value: any): SetCache {
     this.__data__.set(value, HASH_UNDEFINED)
     return this
   }
@@ -41,11 +42,20 @@ class SetCache {
    * @param {*} value The value to search for.
    * @returns {boolean} Returns `true` if `value` is found, else `false`.
    */
-  has(value) {
+  has(value: any): boolean {
     return this.__data__.has(value)
   }
+
+  /**
+   * Adds `value` to the array cache (alias for add).
+   *
+   * @memberOf SetCache
+   * @param {*} value The value to cache.
+   * @returns {SetCache} Returns the cache instance.
+   */
+  push(value: any): SetCache {
+    return this.add(value)
+  }
 }
-// @ts-expect-error
-SetCache.prototype.push = SetCache.prototype.add
 
 export default SetCache

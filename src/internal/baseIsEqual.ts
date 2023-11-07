@@ -8,14 +8,20 @@ import baseIsEqualDeep from './baseIsEqualDeep'
  * @private
  * @param {*} value The value to compare.
  * @param {*} other The other value to compare.
- * @param {boolean} bitmask The bitmask flags.
+ * @param {number} bitmask The bitmask flags.
  *  1 - Unordered comparison
  *  2 - Partial comparison
  * @param {Function} [customizer] The function to customize comparisons.
  * @param {object} [stack] Tracks traversed `value` and `other` objects.
  * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
  */
-function baseIsEqual(value, other, bitmask, customizer, stack) {
+function baseIsEqual(
+  value: any,
+  other: any,
+  bitmask: number = 1,
+  customizer?: Function,
+  stack?: object,
+): boolean {
   if (value === other)
     return true
 
@@ -24,6 +30,7 @@ function baseIsEqual(value, other, bitmask, customizer, stack) {
     || other == null
     || (!isObjectLike(value) && !isObjectLike(other))
   )
+  // eslint-disable-next-line no-self-compare
     return value !== value && other !== other
 
   return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual, stack)

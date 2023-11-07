@@ -14,14 +14,20 @@
  * some([null, 0, 'yes', false], Boolean)
  * // => true
  */
-function some(array: string | any[] | null, predicate: { (othValue: any, othIndex: any): any; (arg0: any, arg1: number, arg2: any): any }) {
-  let index = -1
-  const length = array == null ? 0 : array.length
+function some<T>(
+  array: T[] | null,
+  predicate: (value: T, index: number, array: T[]) => boolean,
+): boolean {
+  if (array === null)
+    return false
 
-  while (++index < length) {
+  const length = array.length
+
+  for (let index = 0; index < length; index++) {
     if (predicate(array[index], index, array))
       return true
   }
+
   return false
 }
 

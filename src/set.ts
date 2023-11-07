@@ -27,8 +27,7 @@ import baseSet from './internal/baseSet'
  * console.log(object.x[0].y.z)
  * // => 5
  */
-function set(object, path, value) {
-  // @ts-expect-error
+function set(object: object, path: any, value: any): object {
   return object == null ? object : baseSet(object, path, value)
 }
 

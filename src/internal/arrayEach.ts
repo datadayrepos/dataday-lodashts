@@ -6,7 +6,7 @@
  * @param {Function} iteratee The function invoked per iteration.
  * @returns {Array} Returns `array`.
  */
-function arrayEach(array, iteratee) {
+function arrayEach(array: Array<any>, iteratee: Function): Array<any> {
   let index = -1
   const length = array.length
 

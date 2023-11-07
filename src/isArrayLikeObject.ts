@@ -24,7 +24,7 @@ import isObjectLike from './isObjectLike'
  * isArrayLikeObject(Function)
  * // => false
  */
-function isArrayLikeObject(value) {
+function isArrayLikeObject(value: any): boolean {
   return isObjectLike(value) && isArrayLike(value)
 }
 

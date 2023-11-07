@@ -22,10 +22,10 @@
  * _.fromPairs([['a', 1], ['b', 2]]);
  * // => { 'a': 1, 'b': 2 }
  */
-export function fromPairs(pairs) {
+export function fromPairs(pairs: [string, any][]): { [key: string]: any } {
   let index = -1
   const length = pairs ? pairs.length : 0
-  const result = {}
+  const result: { [key: string]: any } = {}
 
   while (++index < length) {
     const pair = pairs[index]

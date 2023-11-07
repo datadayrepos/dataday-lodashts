@@ -11,7 +11,13 @@ import isFlattenable from './isFlattenable'
  * @param {Array} [result] The initial result value.
  * @returns {Array} Returns the new flattened array.
  */
-function baseFlatten(array, depth, predicate, isStrict, result) {
+function baseFlatten(
+  array: Array<any>,
+  depth: number,
+  predicate?: (value: any) => boolean, // predicate should be a function type
+  isStrict: boolean = false, // Provide default boolean value
+  result: Array<any> = [], // Default parameter assignment
+): Array<any> {
   predicate || (predicate = isFlattenable)
   result || (result = [])
 

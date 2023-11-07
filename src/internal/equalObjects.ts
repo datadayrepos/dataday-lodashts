@@ -6,6 +6,12 @@ const COMPARE_PARTIAL_FLAG = 1
 /** Used to check objects for own properties. */
 const hasOwnProperty = Object.prototype.hasOwnProperty
 
+interface Stack {
+  get(key: object): object | undefined
+  set(key: object, value: object): void
+  delete(key: object): boolean
+}
+
 /**
  * A specialized version of `baseIsEqualDeep` for objects with support for
  * partial deep comparisons.
@@ -19,14 +25,21 @@ const hasOwnProperty = Object.prototype.hasOwnProperty
  * @param {object} stack Tracks traversed `object` and `other` objects.
  * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
  */
-function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
+function equalObjects(
+  object: object,
+  other: object,
+  bitmask: number = 1,
+  customizer?: (value: any, other: any, key: any, object: any, otherObject: any) => boolean | undefined,
+  equalFunc?: (value: any, other: any, bitmask: number, customizer?: Function, stack?: Stack) => boolean,
+  stack?: Stack,
+): boolean {
   const isPartial = bitmask & COMPARE_PARTIAL_FLAG
   const objProps = getAllKeys(object)
   const objLength = objProps.length
   const othProps = getAllKeys(other)
   const othLength = othProps.length
 
-  if (objLength != othLength && !isPartial)
+  if (objLength !== othLength && !isPartial)
     return false
 
   let key
@@ -37,13 +50,13 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
       return false
   }
   // Assume cyclic values are equal.
-  const stacked = stack.get(object)
-  if (stacked && stack.get(other))
-    return stacked == other
+  const stacked = stack?.get(object)
+  if (stacked && stack?.get(other))
+    return stacked === other
 
   let result = true
-  stack.set(object, other)
-  stack.set(other, object)
+  stack?.set(object, other)
+  stack?.set(other, object)
 
   let compared
   let skipCtor = isPartial
@@ -67,8 +80,7 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
       result = false
       break
     }
-    // @ts-expect-error
-    skipCtor || (skipCtor = key == 'constructor')
+    skipCtor || (skipCtor = key === 'constructor')
   }
   if (result && !skipCtor) {
     const objCtor = object.constructor
@@ -76,7 +88,7 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
 
     // Non `Object` object instances with different constructors are not equal.
     if (
-      objCtor != othCtor
+      objCtor !== othCtor
       && 'constructor' in object
       && 'constructor' in other
       && !(
@@ -88,8 +100,8 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
     )
       result = false
   }
-  stack.delete(object)
-  stack.delete(other)
+  stack?.delete(object)
+  stack?.delete(other)
   return result
 }
 

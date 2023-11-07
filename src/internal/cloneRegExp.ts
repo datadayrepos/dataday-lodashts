@@ -8,9 +8,16 @@ const reFlags = /\w*$/
  * @param {object} regexp The regexp to clone.
  * @returns {object} Returns the cloned regexp.
  */
-function cloneRegExp(regexp) {
-  const result = new regexp.constructor(regexp.source, reFlags.exec(regexp))
+function cloneRegExp(regexp: RegExp): RegExp {
+  // Extract the flags by converting the RegExp to a string and matching the flags
+  const flagsMatch = reFlags.exec(regexp.toString())
+  if (!flagsMatch)
+    throw new Error('RegExp flags could not be determined.')
+
+  // Construct a new RegExp using the source and the extracted flags
+  const result = new RegExp(regexp.source, flagsMatch[0])
   result.lastIndex = regexp.lastIndex
+
   return result
 }
 

@@ -14,14 +14,15 @@ const hasOwnProperty = Object.prototype.hasOwnProperty
  * @param {boolean} inherited Specify returning inherited property names.
  * @returns {Array} Returns the array of property names.
  */
-function arrayLikeKeys(value, inherited?) {
+function arrayLikeKeys(value: any, inherited?: boolean): Array<any> {
   const isArr = Array.isArray(value)
   const isArg = !isArr && isArguments(value)
   const isBuff = !isArr && !isArg && isBuffer(value)
   const isType = !isArr && !isArg && !isBuff && isTypedArray(value)
   const skipIndexes = isArr || isArg || isBuff || isType
   const length = value.length
-  const result = new Array(skipIndexes ? length : 0)
+  // eslint-disable-next-line unicorn/no-new-array
+  const result = skipIndexes ? new Array(length).fill(undefined) : []
   let index = skipIndexes ? -1 : length
   while (++index < length)
     result[index] = `${index}`
