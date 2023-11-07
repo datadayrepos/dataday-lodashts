@@ -17,7 +17,7 @@ import isArrayLikeObject from './isArrayLikeObject'
  * union([2, 3], [1, 2])
  * // => [2, 3, 1]
  */
-function union(...arrays: Array<any>[]): Array<any> {
+export function union(...arrays: Array<any>[]): Array<any> {
   return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true))
 }
 

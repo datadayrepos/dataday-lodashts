@@ -26,7 +26,7 @@ import baseIsEqual from './internal/baseIsEqual'
  * object === other
  * // => false
  */
-function isEqual(value: any, other: any): boolean {
+export function isEqual(value: any, other: any): boolean {
   return baseIsEqual(value, other)
 }
 

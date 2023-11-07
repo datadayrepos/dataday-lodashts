@@ -15,7 +15,7 @@ import basePick from './internal/basePick'
  * pick(object, ['a', 'c'])
  * // => { 'a': 1, 'c': 3 }
  */
-function pick(object: object, ...paths: (string | string[])[]): object {
+export function pick(object: object, ...paths: (string | string[])[]): object {
   // Flatten paths to a single array of strings
   const flatPaths = paths.flat()
 

@@ -16,7 +16,7 @@
  * isNil(NaN)
  * // => false
  */
-function isNil(value: any): boolean {
+export function isNil(value: any): boolean {
   return value == null
 }
 
