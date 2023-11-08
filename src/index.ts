@@ -1,4 +1,5 @@
 export { clone } from './clone'
+export { cloneDeep } from './cloneDeep'
 export { debounce } from './debounce'
 export { isEqual } from './eqDeep'
 export { flatten } from './flatten'
