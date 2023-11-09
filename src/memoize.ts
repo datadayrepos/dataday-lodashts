@@ -40,7 +40,7 @@
  * // Replace `memoize.Cache`.
  * memoize.Cache = WeakMap
  */
-export function memoize(func: Function, resolver: Function): Function {
+export function memoize(func: Function, resolver?: Function): Function {
   if (
     typeof func !== 'function'
     || (resolver != null && typeof resolver !== 'function')
