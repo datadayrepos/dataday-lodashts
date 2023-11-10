@@ -1,7 +1,7 @@
 {
   "name": "@datadayrepos/lodashts",
   "type": "module",
-  "version": "0.0.1-beta.35",
+  "version": "0.0.1-beta.37",
   "private": false,
   "packageManager": "pnpm@8.9.0",
   "description": "Selected loadash like functions in ts.",
@@ -21,15 +21,14 @@
     "lodash",
     "utilities"
   ],
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.js"
     }
   },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "files": [
     "dist",
@@ -41,13 +40,14 @@
     "release": "bumpp -r && pnpm -r publish",
     "test": "echo \"Error: no test specified\" && exit 1",
     "typecheck": "tsc --noEmit",
-    "build": "tsc",
+    "build": "vite build && tsc --emitDeclarationOnly",
     "pub": "npm publish --access public"
   },
   "devDependencies": {
     "@datadayrepos/eslint-config": "^1.0.1-beta.11",
     "@datadayrepos/eslint-plugin-datadayrepos": "1.0.0-Beta12",
     "@datadayrepos/ni": "^0.21.8",
+    "@rollup/plugin-strip": "^3.0.4",
     "@types/node": "^20.8.3",
     "eslint": "^8.51.0",
     "eslint-plugin-sort-keys": "^2.3.5",
