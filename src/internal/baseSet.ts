@@ -24,7 +24,7 @@ function baseSet(object: object, path: Array<any> | string, value: any, customiz
   const lastIndex = length - 1
 
   let index = -1
-  let nested = object
+  let nested: Record<PropertyKey, any> = object
 
   while (nested != null && ++index < length) {
     const key = toKey(path[index])

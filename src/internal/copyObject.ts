@@ -1,5 +1,4 @@
 import assignValue from './assignValue'
-import baseAssignValue from './baseAssignValue'
 
 /**
  * Copies properties of `source` to `object`.

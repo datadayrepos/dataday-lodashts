@@ -32,12 +32,12 @@ const hasOwnProperty = Object.prototype.hasOwnProperty
  * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
  */
 function baseIsEqualDeep(
-  object: object,
-  other: object,
+  object: Record<PropertyKey, any>,
+  other: Record<PropertyKey, any>,
   bitmask: number = 1,
-  customizer?: Function,
-  equalFunc?: Function, // Make equalFunc optional if your logic allows for it
-  stack?: object, // stack is already being handled as optional within your function
+  customizer?: (...args: any[]) => any,
+  equalFunc?: (...args: any[]) => boolean,
+  stack?: Stack,
 ): boolean {
   let objIsArr = Array.isArray(object)
   const othIsArr = Array.isArray(other)
@@ -61,7 +61,7 @@ function baseIsEqualDeep(
   if (isSameTag && !objIsObj) {
     stack || (stack = new Stack([]))
     return objIsArr || isTypedArray(object)
-      ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
+      ? equalArrays(object as any[], other as any[], bitmask, customizer, equalFunc, stack)
       : equalByTag(
         object,
         other,
@@ -80,7 +80,7 @@ function baseIsEqualDeep(
       const objUnwrapped = objIsWrapped ? object.value() : object
       const othUnwrapped = othIsWrapped ? other.value() : other
       stack || (stack = new Stack([]))
-      return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack)
+      return equalFunc!(objUnwrapped, othUnwrapped, bitmask, customizer, stack)
     }
   }
   if (!isSameTag)

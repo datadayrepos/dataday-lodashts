@@ -60,7 +60,7 @@ export function throttle(func: Function, wait: number, options: { leading?: bool
     leading = 'leading' in options ? !!options.leading : leading
     trailing = 'trailing' in options ? !!options.trailing : trailing
   }
-  return debounce(func, wait, {
+  return debounce(func as (...args: any[]) => any, wait, {
     leading,
     maxWait: wait,
     trailing,

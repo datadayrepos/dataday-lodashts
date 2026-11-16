@@ -22,7 +22,7 @@ import map from './map'
  * // => [1, 1, 2, 2]
  */
 export function flatMap(collection: Array<any> | object, iteratee: Function): Array<any> {
-  return baseFlatten(map(collection, iteratee), 1)
+  return baseFlatten(map(collection as any[], iteratee), 1)
 }
 
 export default flatMap

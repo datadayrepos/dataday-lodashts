@@ -6,8 +6,8 @@ import baseIndexOf from './baseIndexOf'
  *
  * @private
  * @param {Array} [array] The array to inspect.
- * @param {*} target The value to search for.
- * @returns {boolean} Returns `true` if `target` is found, else `false`.
+ * @param {*} value The value to search for.
+ * @returns {boolean} Returns `true` if `value` is found, else `false`.
  */
 function arrayIncludes(array: Array<any>, value: any): boolean {
   const length = array == null ? 0 : array.length

@@ -29,6 +29,7 @@
  * // => true
  */
 function eq(value: any, other: any): boolean {
+  // eslint-disable-next-line no-self-compare -- SameValueZero treats NaN as equal without coercion.
   return value === other || (value !== value && other !== other)
 }
 

@@ -17,57 +17,55 @@ const LARGE_ARRAY_SIZE = 200
  * @param {Function} [comparator] The comparator invoked per element.
  * @returns {Array} Returns the new duplicate free array.
  */
-function baseUniq(array: any[], iteratee?: ((arg0: any) => any) | undefined, comparator?: undefined): Array<any> {
+function baseUniq(array: any[], iteratee?: (arg0: any) => any, comparator?: Function): Array<any> {
   let index = -1
-  let includes = arrayIncludes
+  let includes: (values: any, value: any, comparator?: Function) => boolean = arrayIncludes
   let isCommon = true
 
   const { length } = array
   const result: any[] = []
-  let seen = result
+  let seen: any[] | SetCache = result
 
   if (comparator) {
     isCommon = false
-    // @ts-expect-error
-    includes = arrayIncludesWith
+    includes = arrayIncludesWith as typeof includes
   }
   else if (length >= LARGE_ARRAY_SIZE) {
     const set = iteratee ? null : createSet(array)
-    if (set)
-      return setToArray(set)
+    if (set) {
+      // Keep the legacy Set fallback behavior; its runtime defect is a separate repair.
+      return setToArray(set as Set<any>)
+    }
 
     isCommon = false
     includes = cacheHas
-    // @ts-expect-error
     seen = new SetCache()
   }
   else {
     seen = iteratee ? [] : result
   }
+  // eslint-disable-next-line no-labels, no-restricted-syntax -- Preserve the legacy deduplication loop's early continuation.
   outer: while (++index < length) {
     let value = array[index]
     const computed = iteratee ? iteratee(value) : value
 
     value = comparator || value !== 0 ? value : 0
+    // eslint-disable-next-line no-self-compare -- SameValueZero detects NaN without coercion.
     if (isCommon && computed === computed) {
-      let seenIndex = seen.length
+      let seenIndex = (seen as any[]).length
       while (seenIndex--) {
-        if (seen[seenIndex] === computed)
+        if ((seen as any[])[seenIndex] === computed)
+          // eslint-disable-next-line no-labels -- Continue the outer scan when a duplicate is found.
           continue outer
       }
       if (iteratee)
         seen.push(computed)
 
-      // @ts-expect-error
       result.push(value)
-      // @ts-expect-error
     }
     else if (!includes(seen, computed, comparator)) {
-      if (seen !== result) {
-        // @ts-expect-error
+      if (seen !== result)
         seen.push(computed)
-      }
-      // @ts-expect-error
       result.push(value)
     }
   }

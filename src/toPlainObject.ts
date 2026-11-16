@@ -22,7 +22,7 @@
  */
 function toPlainObject(value: any): object {
   value = Object(value)
-  const result = {}
+  const result: Record<string, any> = {}
   for (const key in value)
     result[key] = value[key]
 

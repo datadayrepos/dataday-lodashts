@@ -47,8 +47,8 @@ function equalByTag(
   other: any, // Changed to `any` for the same reason
   tag: string,
   bitmask: number = 1,
-  customizer?: Function,
-  equalFunc?: Function,
+  customizer?: (...args: any[]) => any,
+  equalFunc?: (...args: any[]) => boolean,
   stack?: Stack,
 ): boolean {
   let convert // Declare convert outside of the switch to avoid no-case-declarations warning

@@ -11,9 +11,9 @@ const MAX_MEMOIZE_SIZE = 500
  * @param {Function} func The function to have its output memoized.
  * @returns {Function} Returns the new memoized function.
  */
-function memoizeCapped(func) {
-  const result = memoize(func, (key) => {
-    const { cache } = result
+function memoizeCapped(func: Function) {
+  const result = memoize(func, (key: any) => {
+    const { cache } = result as Function & { cache: Map<any, any> }
     if (cache.size === MAX_MEMOIZE_SIZE)
       cache.clear()
 

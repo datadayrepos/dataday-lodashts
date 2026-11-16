@@ -8,7 +8,7 @@ import isIterateeCall from './isIterateeCall'
  * @returns {Function} Returns the new assigner function.
  */
 function createAssigner(assigner: Function): Function {
-  return (object, ...sources) => {
+  return (object: any, ...sources: any[]) => {
     let index = -1
     let length = sources.length
     let customizer = length > 1 ? sources[length - 1] : undefined

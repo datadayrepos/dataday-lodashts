@@ -26,10 +26,10 @@ interface Stack {
  * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
  */
 function equalObjects(
-  object: object,
-  other: object,
+  object: Record<PropertyKey, any>,
+  other: Record<PropertyKey, any>,
   bitmask: number = 1,
-  customizer?: (value: any, other: any, key: any, object: any, otherObject: any) => boolean | undefined,
+  customizer?: (value: any, other: any, key: any, object: any, otherObject: any, stack?: Stack) => boolean | undefined,
   equalFunc?: (value: any, other: any, bitmask: number, customizer?: Function, stack?: Stack) => boolean,
   stack?: Stack,
 ): boolean {
@@ -59,7 +59,7 @@ function equalObjects(
   stack?.set(other, object)
 
   let compared
-  let skipCtor = isPartial
+  let skipCtor: number | boolean = isPartial
   while (++index < objLength) {
     key = objProps[index]
     const objValue = object[key]
@@ -74,7 +74,7 @@ function equalObjects(
     if (
       !(compared === undefined
         ? objValue === othValue
-          || equalFunc(objValue, othValue, bitmask, customizer, stack)
+          || equalFunc!(objValue, othValue, bitmask, customizer, stack)
         : compared)
     ) {
       result = false

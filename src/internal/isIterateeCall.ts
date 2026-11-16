@@ -14,7 +14,7 @@ import isIndex from './isIndex.js'
  *  else `false`.
  */
 
-function isIterateeCall(value, index, object) {
+function isIterateeCall(value: any, index: any, object: any) {
   if (!isObject(object))
     return false
 

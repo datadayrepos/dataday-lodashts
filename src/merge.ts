@@ -30,7 +30,7 @@ import createAssigner from './internal/createAssigner'
  * merge(object, other)
  * // => { 'a': [{ 'b': 2, 'c': 3 }, { 'd': 4, 'e': 5 }] }
  */
-export const merge = createAssigner((object, source, srcIndex) => {
+export const merge = createAssigner((object: object, source: object, srcIndex: number) => {
   baseMerge(object, source, srcIndex)
 })
 

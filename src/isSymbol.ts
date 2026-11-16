@@ -19,7 +19,7 @@ function isSymbol(value: any): boolean {
   const type = typeof value
   return (
     type === 'symbol'
-    || (type === 'object' && value != null && getTag(value) == '[object Symbol]')
+    || (type === 'object' && value != null && getTag(value) === '[object Symbol]')
   )
 }
 

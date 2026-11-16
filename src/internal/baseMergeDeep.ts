@@ -10,6 +10,7 @@ import copyArray from './copyArray.js'
 import cloneTypedArray from './cloneTypedArray.js'
 import cloneBuffer from './cloneBuffer.js'
 import assignMergeValue from './assignMergeValue.js'
+import type Stack from './Stack.js'
 
 /**
  * A specialized version of `baseMerge` for arrays and objects which performs
@@ -26,7 +27,15 @@ import assignMergeValue from './assignMergeValue.js'
  * @param {object} [stack] Tracks traversed source values and their merged
  *  counterparts.
  */
-function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
+function baseMergeDeep(
+  object: Record<string, any>,
+  source: Record<string, any>,
+  key: string,
+  srcIndex: number,
+  mergeFunc: Function,
+  customizer: Function | undefined,
+  stack: Stack,
+) {
   const objValue = object[key]
   const srcValue = source[key]
   const stacked = stack.get(srcValue)

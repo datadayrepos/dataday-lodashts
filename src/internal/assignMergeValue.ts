@@ -10,7 +10,7 @@ import baseAssignValue from './baseAssignValue'
  * @param {string} key The key of the property to assign.
  * @param {*} value The value to assign.
  */
-function assignMergeValue(object: object, key: string, value?: any) {
+function assignMergeValue(object: Record<string, any>, key: string, value?: any) {
   if ((value !== undefined && !eq(object[key], value))
       || (value === undefined && !(key in object)))
     baseAssignValue(object, key, value)

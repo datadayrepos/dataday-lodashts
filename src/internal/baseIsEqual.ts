@@ -1,5 +1,6 @@
 import isObjectLike from '../isObjectLike'
 import baseIsEqualDeep from './baseIsEqualDeep'
+import type Stack from './Stack'
 
 /**
  * The base implementation of `isEqual` which supports partial comparisons
@@ -19,8 +20,8 @@ function baseIsEqual(
   value: any,
   other: any,
   bitmask: number = 1,
-  customizer?: Function,
-  stack?: object,
+  customizer?: (...args: any[]) => any,
+  stack?: Stack,
 ): boolean {
   if (value === other)
     return true

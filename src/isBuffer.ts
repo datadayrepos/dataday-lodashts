@@ -4,6 +4,7 @@ import root from './internal/root'
 const freeExports
   = typeof exports === 'object'
   && exports !== null
+  // eslint-disable-next-line datadayrepos/no-cjs-exports -- Read-only CommonJS detection preserves the existing Buffer fallback.
   && !exports.nodeType
   && exports
 
@@ -12,7 +13,7 @@ const freeModule
   = freeExports
   && typeof module === 'object'
   && module !== null
-  // @ts-expect-error
+  // @ts-expect-error -- Legacy CommonJS shims can expose a DOM-like nodeType property.
   && !module.nodeType
   && module
 
@@ -30,7 +31,6 @@ const nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined
  *
  * @since 4.3.0
  * @category Lang
- * @param {*} value The value to check.
  * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
  * @example
  *

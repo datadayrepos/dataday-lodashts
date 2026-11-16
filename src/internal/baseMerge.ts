@@ -16,11 +16,11 @@ import baseMergeDeep from './baseMergeDeep'
  * @param {object} [stack] Tracks traversed source values and their merged
  *  counterparts.
  */
-function baseMerge(object: object, source: object, srcIndex: number, customizer: Function, stack: object) {
+function baseMerge(object: Record<string, any>, source: object, srcIndex: number, customizer?: Function, stack?: Stack) {
   if (object === source)
     return
 
-  baseFor(source, (srcValue, key) => {
+  baseFor(source, (srcValue: any, key: string) => {
     if (isObject(srcValue)) {
       stack || (stack = new Stack())
       baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack)

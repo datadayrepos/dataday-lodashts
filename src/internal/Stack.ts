@@ -5,7 +5,7 @@ import MapCache from './MapCache'
 const LARGE_ARRAY_SIZE = 200
 
 class Stack {
-  __data__: ListCache
+  __data__: ListCache | MapCache
   size: number
   /**
    * Creates a stack cache object to store key-value pairs.
@@ -14,7 +14,7 @@ class Stack {
    * @constructor
    * @param {Array} [entries] The key-value pairs to cache.
    */
-  constructor(entries: Array<any>) {
+  constructor(entries?: Array<[any, any]>) {
     const data = (this.__data__ = new ListCache(entries))
     this.size = data.size
   }
@@ -36,7 +36,7 @@ class Stack {
    * @param {string} key The key of the value to remove.
    * @returns {boolean} Returns `true` if the entry was removed, else `false`.
    */
-  delete(key: string): boolean {
+  delete(key: any): boolean {
     const data = this.__data__
     const result = data.delete(key)
 
@@ -51,7 +51,7 @@ class Stack {
    * @param {string} key The key of the value to get.
    * @returns {*} Returns the entry value.
    */
-  get(key: string): any {
+  get(key: any): any {
     return this.__data__.get(key)
   }
 
@@ -62,7 +62,7 @@ class Stack {
    * @param {string} key The key of the entry to check.
    * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
    */
-  has(key: string): boolean {
+  has(key: any): boolean {
     return this.__data__.has(key)
   }
 
@@ -74,7 +74,7 @@ class Stack {
    * @param {*} value The value to set.
    * @returns {object} Returns the stack cache instance.
    */
-  set(key: string, value: any): object {
+  set(key: any, value: any): object {
     let data = this.__data__
     if (data instanceof ListCache) {
       const pairs = data.__data__
